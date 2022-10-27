@@ -22,30 +22,29 @@ def split():
     train_folder = "data/train/"
     test_folder = "data/test/"
     val_folder = "data/val/"
+
+    # create folder for each file, TODO: Create it if not exists
     os.mkdir(train_folder)
     os.mkdir(test_folder)
     os.mkdir(val_folder)
+
     filenames = os.listdir(main_dic)
     
-    np.random.shuffle(filenames)
+    random.shuffle(filenames)
 
     # split the file to 80% train, 10% test, 10% val
     train = int(0.8 * len(filenames))
     test = int(0.1 * len(filenames))
-    
-    train_file, test_file, val_file = np.split(filenames, [train, test])
+    val = int(0.1 * len(filenames))
 
-    for filename in train_file:
-        
-        shutil.move(main_dic+filename, train_folder+filename)
-
-    for filename in test_file:
-        
-        shutil.move(main_dic+filename, test_folder+filename)
-
-    for filename in val_file:
-        
-        shutil.move(main_dic+filename, val_folder+filename)
+    # move the files to each folder
+    for i, filename in enumerate(filenames):
+        if i < train:
+            shutil.move(main_dic + filename, train_folder + filename)
+        elif i >= train and i < train+test:
+            shutil.move(main_dic + filename, test_folder + filename)
+        else:
+            shutil.move(main_dic + filename, val_folder + filename)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Split data into training / validation / testing')
