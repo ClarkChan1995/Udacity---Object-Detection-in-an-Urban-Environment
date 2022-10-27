@@ -31,7 +31,7 @@ def split():
 
     # split the file to 80% train, 10% test, 10% val
     train = int(0.8 * len(filenames))
-    test = int((len(filenames) - train)/ 2)
+    test = int(0.1 * len(filenames))
     
     train_file, test_file, val_file = np.split(filenames, [train, test])
 
