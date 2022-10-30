@@ -53,7 +53,7 @@ At first, I try to setup in my own workspace by downloading the dataset by using
 ## Dataset Observation
 Here are some of results of annotation on the every objects based on the groundtruth bounding boxes provided in tfrecord file. The attached results show that the dataset consists of several environment such as sunnny/cloudy weather, day/night time. With the observation, it is noted that number of vehicles is the most all of the time in the dataset. 
 
-![](https://file%2B.vscode-resource.vscode-cdn.net/Users/nazzainal/python_project/Udacity---Object-Detection-in-an-Urban-Environment/results/img1.png?version%3D1667094137470)
+![](results/img1.png)
 
 ![](results/img2.png)
 
