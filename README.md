@@ -43,7 +43,7 @@ python download_process.py --data_dir {processed_file_location} --size {number o
 
 You are downloading 100 files (unless you changed the `size` parameter) so be patient! Once the script is done, you can look inside your `data_dir` folder to see if the files have been downloaded and processed correctly.
 
-## MyGoal
+**# MyGoal**
 This project is to use the SSD-ResNet-50 to train the model (consider as transfer learning) to detect and localize the vehicle, pedestrian and cyclist in urban environment. At the same time, it is needed to make the adjustment in the hyperparameters to make the model detect the objects well.
 
 ## Initial Workflow
