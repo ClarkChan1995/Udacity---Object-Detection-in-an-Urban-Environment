@@ -21,6 +21,7 @@ The data you will use for training, validation and testing is organized as follo
 The `training_and_validation` folder contains file that have been downsampled: we have selected one every 10 frames from 10 fps videos. The `testing` folder contains frames from the 10 fps video without downsampling.
 ```
 You will split this `training_and_validation` data into `train`, and `val` sets by completing and executing the `create_splits.py` file.
+```
 
 ## Prerequisites
 
@@ -43,7 +44,7 @@ python download_process.py --data_dir {processed_file_location} --size {number o
 
 You are downloading 100 files (unless you changed the `size` parameter) so be patient! Once the script is done, you can look inside your `data_dir` folder to see if the files have been downloaded and processed correctly.
 
-## ## MyGoal
+## MyGoal
 This project is to use the SSD-ResNet-50 to train the model (consider as transfer learning) to detect and localize the vehicle, pedestrian and cyclist in urban environment. At the same time, it is needed to make the adjustment in the hyperparameters to make the model detect the objects well.
 
 ## Initial Workflow
@@ -53,3 +54,9 @@ At first, I try to setup in my own workspace by downloading the dataset by using
 Here are some of results of annotation on the every objects based on the groundtruth bounding boxes provided in tfrecord file. The attached results show that the dataset consists of several environment such as sunnny/cloudy weather, day/night time. With the observation, it is noted that number of vehicles is the most all of the time in the dataset. 
 
 ![](https://file%2B.vscode-resource.vscode-cdn.net/Users/nazzainal/python_project/Udacity---Object-Detection-in-an-Urban-Environment/results/img1.png?version%3D1667094137470)
+
+![](results/img2.png)
+
+![](results/img3.png)
+
+![](results/img4.png)
