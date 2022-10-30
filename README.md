@@ -44,7 +44,7 @@ python download_process.py --data_dir {processed_file_location} --size {number o
 
 You are downloading 100 files (unless you changed the `size` parameter) so be patient! Once the script is done, you can look inside your `data_dir` folder to see if the files have been downloaded and processed correctly.
 
-## MyGoal
+## The Goal
 This project is to use the SSD-ResNet-50 to train the model (consider as transfer learning) to detect and localize the vehicle, pedestrian and cyclist in urban environment. At the same time, it is needed to make the adjustment in the hyperparameters to make the model detect the objects well.
 
 ## Initial Workflow
@@ -60,3 +60,63 @@ Here are some of results of annotation on the every objects based on the groundt
 ![](results/img3.png)
 
 ![](results/img4.png)
+
+## Analysis
+### EDA
+A simple analysis is done based on the training dataset. The aim is to find out how frequent the car, pedestrian and cyclist shown suring training. In this time, I take 10,000 images randomly from the dataset to find it out. Below shows the result that I found in which the cars are the most frequent, followed by the pedestrian and lastly cyclist. 
+
+![](results/img5.png)
+
+### Suitable Augmentation
+In this project, it is given the instruction that by using the augmentation may increase the accuracy of model. Therefore, from the previous analysis, I have chosen the following augmentations:
+1. random_horizontal_flip
+2. random_crop_image
+3. random_adjust_brightness
+4. random_adjust_contrast
+5. random_adjust saturation
+6. random_distort_color
+7. random_adjust_hue
+
+## Edit the config file
+
+Now you are ready for training. As we explain during the course, the Tf Object Detection API relies on **config files**. The config that we will use for this project is `pipeline.config`, which is the config for a SSD Resnet 50 640x640 model. You can learn more about the Single Shot Detector [here](https://arxiv.org/pdf/1512.02325.pdf).
+
+First, let's download the [pretrained model](http://download.tensorflow.org/models/object_detection/tf2/20200711/ssd_resnet50_v1_fpn_640x640_coco17_tpu-8.tar.gz) and move it to `/home/workspace/experiments/pretrained_model/`.
+
+We need to edit the config files to change the location of the training and validation files, as well as the location of the label_map file, pretrained weights. We also need to adjust the batch size. To do so, run the following:
+```
+python edit_config.py --train_dir /home/workspace/data/train/ --eval_dir /home/workspace/data/val/ --batch_size 2 --checkpoint /home/workspace/experiments/pretrained_model/ssd_resnet50_v1_fpn_640x640_coco17_tpu-8/checkpoint/ckpt-0 --label_map /home/workspace/experiments/label_map.pbtxt
+```
+A new config file has been created, `pipeline_new.config`.
+
+## Training
+A several experiment have been carried out and this is so far the best result can be obtained. By using the SGD optimizer with its default momentum and the decay learning rate of 3e-4, the training is carried out together with the mentioned augmentations and 3000 of total steps. The reason of using 3000 of total steps is because it would lead to overfitting and delete the previous batch weights are needed(based on the experiment of 5000). From the figure, it shows that the validation loss and mAP haven't reached plateau, however, it is near to each other. 
+
+![](results/result1.png)
+
+![](results/result2.png)
+
+![](results/result3.png)
+
+![](results/result4.png)
+
+### Creating an animation
+#### Export the trained model
+Modify the arguments of the following function to adjust it to your models:
+
+```
+python experiments/exporter_main_v2.py --input_type image_tensor --pipeline_config_path experiments/reference/pipeline_new.config --trained_checkpoint_dir experiments/reference/ --output_directory experiments/reference/exported/
+```
+
+This should create a new folder `experiments/reference/exported/saved_model`. You can read more about the Tensorflow SavedModel format [here](https://www.tensorflow.org/guide/saved_model).
+
+Finally, you can create a video of your model's inferences for any tf record file. To do so, run the following command (modify it to your files):
+```
+python inference_video.py --labelmap_path label_map.pbtxt --model_path experiments/reference/exported/saved_model --tf_record_path /data/waymo/testing/segment-12200383401366682847_2552_140_2572_140_with_camera_labels.tfrecord --config_path experiments/reference/pipeline_new.config --output_path animation.gif
+```
+
+## Animation Result
+![](results/animation.gif)
+
+## Future Work
+This project still has the improvement such as adjusting the hyperparameters of training to increase the accuracy on the object detection and the performance of validation loss with mAP. Also, from the animation, the calculation of accuracy has duplicated sometimes, maybe it is because of the miscalculation of the default non-max suppression function. Due to the submission date required and the limited hardware resources, this project can be done to here so far. 
